@@ -1,13 +1,16 @@
 import React from 'react'
+import axios from 'axios'
+import Loader from 'react-loader-spinner'
 
 
 class Login extends React.Component {
 
-    state={
+    state = {
         credentials: {
             username: '',
             password: ''
-        }
+        },
+        isLoading: false
     }
 
     handleChanges = e => {
@@ -21,12 +24,28 @@ class Login extends React.Component {
 
     login = e => {
         e.preventDefault();
+        this.setState({
+            ...this.state,
+            isLoading: true
+        });
+        axios
+            .post("http://localhost:5000/api/login", this.state.credentials)
+            .then(res => {
+                console.log(res)
+                localStorage.setItem("token", JSON.stringify(res.data.payload))
+                this.setState({
+                    isLoading: false
+                })
+            })
+            .catch(err => console.log({ err }));
     }
 
     render() {
         return (
+
             <div>
-                <form>
+                {this.state.isLoading ? <Loader type="TailSpin" color="#00BFFF" height={80} width={80} /> : 
+                <form onSubmit={this.login}>
                     <label htmlFor="username">
                         Username:
                         <input
@@ -47,7 +66,7 @@ class Login extends React.Component {
                         />
                     </label>
                     <button>Log in</button>
-                </form>
+                </form>}
             </div>
         )
     }
