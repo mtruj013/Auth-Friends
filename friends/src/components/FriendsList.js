@@ -1,6 +1,7 @@
 import React from 'react'
 import { axiosWithAuth } from '../utils/axiosWithAuth'
 import AddFriend from './AddFriend'
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 class FriendsList extends React.Component {
 
@@ -28,6 +29,7 @@ class FriendsList extends React.Component {
     render(){
         return(
             <div>
+                <Route component={AddFriend}/>
                 <h1>FRIENDS</h1>
                 {this.state.friends.map(friend => {
                     return <div>
@@ -36,7 +38,6 @@ class FriendsList extends React.Component {
                         <h3>{friend.email}</h3>
                         </div>
                 })}
-                <AddFriend/>
             </div>
         )
     }
