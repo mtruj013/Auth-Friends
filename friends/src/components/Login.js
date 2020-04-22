@@ -1,6 +1,6 @@
 import React from 'react'
-import axios from 'axios'
 import Loader from 'react-loader-spinner'
+import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 
 class Login extends React.Component {
@@ -28,14 +28,15 @@ class Login extends React.Component {
             ...this.state,
             isLoading: true
         });
-        axios
-            .post("http://localhost:5000/api/login", this.state.credentials)
+        axiosWithAuth()
+            .post('/api/login', this.state.credentials)
             .then(res => {
                 console.log(res)
                 localStorage.setItem("token", JSON.stringify(res.data.payload))
                 this.setState({
                     isLoading: false
                 })
+                this.props.history.push('/protected')
             })
             .catch(err => console.log({ err }));
     }
